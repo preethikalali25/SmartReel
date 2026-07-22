@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartReel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #14111A;
+    --bg-alt: #1C1826;
+    --bg-alt-2: #241E31;
+    --text: #F5F1EC;
+    --text-dim: #A69EB0;
+    --accent: #3ED7C4;
+    --accent-warm: #FF8A5C;
+    --border: #2C2536;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a{ color:inherit; }
+  ::selection{ background: var(--accent); color: var(--bg); }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap{ max-width: 1120px; margin:0 auto; padding: 0 32px; }
+
+  header{
+    position: sticky; top:0; z-index:20;
+    background: rgba(20,17,26,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding: 18px 32px; max-width:1120px; margin:0 auto; }
+  .logo{ font-family: var(--font-display); font-weight:700; font-size:1.1rem; display:flex; align-items:center; gap:8px; }
+  .logo-mark{
+    width: 22px; height:22px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    display:inline-block;
+  }
+  .nav-links{ display:flex; gap:26px; list-style:none; font-size:0.9rem; color:var(--text-dim); }
+  .nav-links a{ text-decoration:none; transition: color .2s; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{
+    font-family: var(--font-mono); font-size:0.8rem; padding:9px 18px;
+    background: var(--accent-warm); color: var(--bg); border-radius: 20px;
+    text-decoration:none; font-weight:500; white-space:nowrap;
+  }
+  .nav-cta:hover{ opacity:0.88; }
+  @media (max-width:760px){ .nav-links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding: 88px 0 40px; position:relative; }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items:center;
+  }
+  @media (max-width: 860px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    font-family: var(--font-mono); font-size:0.78rem; color:var(--accent-warm);
+    letter-spacing:0.1em; text-transform:uppercase; margin-bottom:18px;
+  }
+  h1{
+    font-family: var(--font-display); font-weight:700;
+    font-size: clamp(2.3rem, 5.6vw, 3.6rem); line-height:1.06; letter-spacing:-0.01em;
+  }
+  h1 .grad{
+    background: linear-gradient(120deg, var(--accent), var(--accent-warm));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{ margin-top:22px; max-width:480px; font-size:1.06rem; color:var(--text-dim); }
+  .hero-actions{ margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--font-body); font-size:0.95rem; font-weight:500;
+    padding: 14px 24px; border-radius: 30px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; transition: transform .15s ease, opacity .15s ease;
+  }
+  .btn-primary{ background: var(--accent-warm); color: var(--bg); }
+  .btn-primary:hover{ transform: translateY(-1px); }
+  .btn-ghost{ border:1px solid var(--border); color: var(--text-dim); }
+  .btn-ghost:hover{ color:var(--text); border-color: var(--text-dim); }
+  .hero-note{ margin-top: 18px; font-family: var(--font-mono); font-size:0.78rem; color: var(--text-dim); }
+
+  /* ---------- PHONE MOCKUP ---------- */
+  .phone-stage{ display:flex; justify-content:center; }
+  .phone{
+    width: 280px; height: 570px; border-radius: 38px;
+    background: var(--bg-alt); border: 1px solid var(--border);
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
+    padding: 14px; position:relative;
+  }
+  .phone-notch{
+    width: 90px; height:18px; background: var(--bg); border-radius: 12px;
+    margin: 0 auto 10px;
+  }
+  .phone-screen{
+    background: var(--bg-alt-2); border-radius: 24px; height: calc(100% - 40px);
+    padding: 22px 18px; display:flex; flex-direction:column;
+  }
+  .clip-label{ font-family: var(--font-mono); font-size:0.7rem; color: var(--text-dim); }
+  .clip-title{ font-family: var(--font-display); font-weight:600; font-size:1.05rem; margin-top:4px; }
+  .toggle-row{
+    display:flex; gap:8px; margin-top:18px; background: var(--bg); padding:4px; border-radius:20px;
+  }
+  .toggle-btn{
+    flex:1; text-align:center; padding:8px 0; border-radius:16px;
+    font-family: var(--font-mono); font-size:0.72rem; cursor:pointer; user-select:none;
+    transition: background .2s, color .2s;
+    color: var(--text-dim);
+  }
+  .toggle-btn.active{ background: var(--accent); color: var(--bg); }
+  .phone-wave-box{
+    margin-top: 18px; flex:1; background: var(--bg);
+    border-radius: 16px; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .phone-wave-box svg{ width:100%; height:100%; }
+  .db-readout{
+    margin-top: 16px; display:flex; justify-content:space-between; align-items:baseline;
+  }
+  .db-readout .num{ font-family: var(--font-display); font-size:1.6rem; font-weight:700; color: var(--accent); }
+  .db-readout .lbl{ font-family: var(--font-mono); font-size:0.68rem; color: var(--text-dim); }
+
+  /* ---------- HOW IT WORKS ---------- */
+  section{ padding: 84px 0; border-top: 1px solid var(--border); }
+  .section-label{
+    font-family: var(--font-mono); font-size:0.78rem; color:var(--accent-warm);
+    text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px;
+  }
+  h2{
+    font-family: var(--font-display); font-weight:600;
+    font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 600px;
+  }
+  .lede{ margin-top:16px; max-width:560px; color:var(--text-dim); font-size:1.02rem; }
+
+  .steps{ margin-top:48px; display:grid; grid-template-columns: repeat(3,1fr); gap:28px; }
+  @media (max-width:820px){ .steps{ grid-template-columns:1fr; } }
+  .step{
+    background: var(--bg-alt); border:1px solid var(--border); border-radius:14px; padding:28px;
+  }
+  .step-num{ font-family: var(--font-mono); font-size:0.75rem; color:var(--accent); }
+  .step-title{ font-family: var(--font-display); font-weight:600; font-size:1.1rem; margin-top:12px; }
+  .step-detail{ color:var(--text-dim); font-size:0.92rem; margin-top:8px; }
+
+  /* ---------- FEATURES ---------- */
+  .feat-grid{ margin-top:48px; display:grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  @media (max-width:700px){ .feat-grid{ grid-template-columns:1fr; } }
+  .feat{ background: var(--bg-alt); padding:30px; }
+  .feat-icon{ width:34px; height:34px; border-radius:9px; background: linear-gradient(135deg, var(--accent), var(--accent-warm)); margin-bottom: 16px; }
+  .feat-title{ font-family: var(--font-display); font-weight:600; font-size:1.02rem; }
+  .feat-detail{ color:var(--text-dim); font-size:0.9rem; margin-top:8px; }
+
+  /* ---------- WHY AUDIO ---------- */
+  .quote-block{
+    margin-top:40px; border-left: 3px solid var(--accent-warm); padding-left:24px;
+    font-family: var(--font-display); font-size:1.3rem; font-weight:500; max-width:640px;
+    color: var(--text);
+  }
+  .quote-attr{ margin-top:14px; font-family: var(--font-mono); font-size:0.8rem; color:var(--text-dim); }
+
+  /* ---------- CTA ---------- */
+  .cta-section{ text-align:center; }
+  .cta-section h2{ margin:0 auto; }
+  .cta-section .lede{ margin-left:auto; margin-right:auto; text-align:center; }
+  .store-badges{ margin-top:34px; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+
+  footer{
+    padding: 30px 0 46px; border-top:1px solid var(--border);
+    font-family: var(--font-mono); font-size:0.74rem; color:var(--text-dim);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  footer a{ text-decoration:none; color:var(--text-dim); }
+  footer a:hover{ color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo"><span class="logo-mark"></span>SmartReel</div>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#get">Get it</a></li>
+    </ul>
+    <a class="nav-cta" href="#get">Download now</a>
+  </div>
+</header>
+
+<section class="hero" style="border-top:none;">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Now live on the App Store</div>
+      <h1>Your voice,<br><span class="grad">cleaned up</span> —<br>in one tap.</h1>
+      <p class="hero-sub">Record wherever you are. SmartReel strips the background noise and evens out your levels automatically, so your Reels sound like they were made in a studio — even when they weren't.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#get">Download now →</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="hero-note">Made for Instagram creators · powered by AssemblyAI</div>
+    </div>
+
+    <div class="phone-stage">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="clip-label">clip_0148.mov</div>
+          <div class="clip-title">Coffee shop voiceover</div>
+          <div class="toggle-row">
+            <div class="toggle-btn" id="toggleBefore">Before</div>
+            <div class="toggle-btn active" id="toggleAfter">After</div>
+          </div>
+          <div class="phone-wave-box">
+            <svg id="phoneWave" viewBox="0 0 240 140" preserveAspectRatio="none"></svg>
+          </div>
+          <div class="db-readout">
+            <div>
+              <div class="num" id="dbNum">−36dB</div>
+              <div class="lbl">background noise</div>
+            </div>
+            <div class="lbl" style="text-align:right;">tap to compare</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-label">How it works</div>
+    <h2>Three steps. No studio, no separate app for editing sound.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Import your clip</div>
+        <div class="step-detail">Pull in footage straight from your camera roll — however it was shot, wherever it was shot.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">SmartReel cleans it</div>
+        <div class="step-detail">Background noise is removed and your voice is leveled automatically, in the time it takes to make coffee.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Export and post</div>
+        <div class="step-detail">Save the cleaned version back to your camera roll, ready for Reels, TikTok, or wherever it's headed next.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-label">What it does</div>
+    <h2>Built around the two things that quietly wreck a good clip.</h2>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="feat-icon"></div>
+        <div class="feat-title">Background noise removal</div>
+        <div class="feat-detail">Traffic, AC hum, room echo, café chatter — gone, without dulling your actual voice.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"></div>
+        <div class="feat-title">Speaker volume isolation</div>
+        <div class="feat-detail">Levels out quiet and loud moments in the same clip, so viewers never have to reach for the volume button.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"></div>
+        <div class="feat-title">One-tap processing</div>
+        <div class="feat-detail">No sliders, no presets to learn. Import, wait a moment, export.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"></div>
+        <div class="feat-title">Keeps your original</div>
+        <div class="feat-detail">Your raw take is never overwritten — the cleaned version saves alongside it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="section-label">Why it matters</div>
+    <h2>People forgive a shaky shot. They rarely forgive bad audio.</h2>
+    <div class="quote-block">
+      Viewers decide whether to keep watching in the first couple of seconds — and muddy, inconsistent sound is one of the fastest ways to lose that decision, even when the visual is great.
+    </div>
+    <div class="quote-attr">— the problem SmartReel is built to solve</div>
+  </div>
+</section>
+
+<section class="cta-section" id="get">
+  <div class="wrap">
+    <div class="section-label" style="justify-content:center; display:flex;">Download</div>
+    <h2>SmartReel is live on the App Store.</h2>
+    <p class="lede">Available for iPhone and iPad. Sign in with Apple or Google to get started.</p>
+    <div class="store-badges">
+      <a class="btn btn-primary" href="mailto:hello@kalelconnect.com?subject=SmartReel%20App%20Store%20link">Get the App Store link →</a>
+      <a class="btn btn-ghost" href="mailto:hello@kalelconnect.com?subject=SmartReel%20question">Questions? Email us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 SmartReel · a KalELConnect product</span>
+    <span style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="https://preethikalali25.github.io/kalelconnect-legal/">Privacy Policy</a>
+      <a href="https://preethikalali25.github.io/kalelconnect-legal/">Terms of Service</a>
+      <a href="mailto:hello@kalelconnect.com">Contact</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function buildPath(w,h,points,opts){
+    const mid = h/2;
+    let d = `M 0 ${mid}`;
+    for(let i=0;i<=points;i++){
+      const x = (i/points)*w;
+      const t = i/points;
+      const base = Math.sin(t*opts.freq*Math.PI*2 + opts.phase) * opts.ampScale * (h*0.34);
+      const env = Math.sin(t*Math.PI);
+      let noise = 0;
+      if(opts.noise > 0){
+        noise = (Math.sin(t*110 + opts.phase*11) * 0.5 + Math.sin(t*260 - opts.phase*5)*0.5) * opts.noise * (h*0.26);
+      }
+      const y = mid + (base+noise)*env;
+      d += ` L ${x.toFixed(2)} ${y.toFixed(2)}`;
+    }
+    return d;
+  }
+
+  const svg = document.getElementById('phoneWave');
+  svg.innerHTML = `<path id="pw" fill="none" stroke="#3ED7C4" stroke-width="2.5"></path>`;
+  const pathEl = svg.querySelector('#pw');
+  const dbNum = document.getElementById('dbNum');
+  const beforeBtn = document.getElementById('toggleBefore');
+  const afterBtn = document.getElementById('toggleAfter');
+
+  let phase = 0;
+  let mode = 'after'; // 'before' | 'after'
+
+  function render(){
+    const noise = mode === 'before' ? 1 : 0.08;
+    const color = mode === 'before' ? '#FF8A5C' : '#3ED7C4';
+    pathEl.setAttribute('stroke', color);
+    pathEl.setAttribute('d', buildPath(240,140,60,{noise, freq:3.4, phase, ampScale: mode==='before' ? 0.5 : 0.72}));
+  }
+
+  function setMode(next){
+    mode = next;
+    beforeBtn.classList.toggle('active', mode==='before');
+    afterBtn.classList.toggle('active', mode==='after');
+    dbNum.textContent = mode==='before' ? '0dB' : '−36dB';
+    render();
+  }
+
+  beforeBtn.addEventListener('click', ()=> setMode('before'));
+  afterBtn.addEventListener('click', ()=> setMode('after'));
+
+  if(reduceMotion){
+    render();
+  } else {
+    function loop(){
+      phase += 0.02;
+      render();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+})();
+</script>
+
+</body>
+</html>
